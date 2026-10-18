@@ -1,0 +1,78 @@
+name: update-cask
+# Keeps Casks/agent-world.rb on the latest release of hodkep/agent-world. The dispatch event is only a wake-up call from that repository's
+# notify-tap workflow; the release is always read from GitHub here, never from the event. The schedule is the safety net if the call is missed.
+on:
+  repository_dispatch:
+    types: [agent-world-release]
+  workflow_dispatch:
+  schedule:
+    - cron: '17 */6 * * *'
+permissions:
+  contents: write
+concurrency:
+  group: update-cask
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - name: Read the latest release
+        id: rel
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          json=$(gh api repos/hodkep/agent-world/releases/latest)
+          tag=$(jq -r .tag_name <<<"$json")
+          version=${tag#v}
+          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "unexpected tag: $tag"; exit 1; }
+          digest() { jq -r --arg n "Agent-World-$version-$1.dmg" '.assets[] | select(.name==$n) | .digest' <<<"$json" | sed 's/^sha256://'; }
+          arm=$(digest arm64); intel=$(digest x64)
+          [[ "$arm" =~ ^[0-9a-f]{64}$ && "$intel" =~ ^[0-9a-f]{64}$ ]] || { echo "no sha256 for the dmgs of $tag"; exit 1; }
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "arm=$arm" >> "$GITHUB_OUTPUT"
+          echo "intel=$intel" >> "$GITHUB_OUTPUT"
+      - name: Rewrite the cask when the version changed
+        id: edit
+        env:
+          VERSION: ${{ steps.rel.outputs.version }}
+          ARM: ${{ steps.rel.outputs.arm }}
+          INTEL: ${{ steps.rel.outputs.intel }}
+        run: |
+          python3 - <<'PY'
+          import os, re
+          p = 'Casks/agent-world.rb'
+          s = open(p).read()
+          current = re.search(r'^  version "([^"]+)"', s, re.M).group(1)
+          if current == os.environ['VERSION']:
+              print(f'cask is already at {current}')
+              open(os.environ['GITHUB_OUTPUT'], 'a').write('changed=false\n')
+              raise SystemExit
+          s = re.sub(r'^(  version )"[^"]+"', r'\g<1>"' + os.environ['VERSION'] + '"', s, flags=re.M)
+          s = re.sub(r'(sha256 arm:\s+)"[0-9a-f]{64}"', r'\g<1>"' + os.environ['ARM'] + '"', s)
+          s = re.sub(r'(intel:\s+)"[0-9a-f]{64}"', r'\g<1>"' + os.environ['INTEL'] + '"', s)
+          open(p, 'w').write(s)
+          print(f'cask moved from {current} to {os.environ["VERSION"]}')
+          open(os.environ['GITHUB_OUTPUT'], 'a').write('changed=true\n')
+          PY
+      - name: Check the cask with Homebrew
+        if: steps.edit.outputs.changed == 'true'
+        run: |
+          set -euo pipefail
+          brew tap-new --no-git hodkep/ci
+          dir="$(brew --repository)/Library/Taps/hodkep/homebrew-ci/Casks"
+          mkdir -p "$dir" && cp Casks/agent-world.rb "$dir/"
+          brew style hodkep/ci/agent-world
+          brew audit --cask --online hodkep/ci/agent-world
+      - name: Commit the update
+        if: steps.edit.outputs.changed == 'true'
+        env:
+          VERSION: ${{ steps.rel.outputs.version }}
+        run: |
+          git config user.name "agent-world tap"
+          git config user.email "agentworld.app@gmail.com"
+          git add Casks/agent-world.rb
+          git commit -m "chore(cask): Agent World $VERSION"
+          git push
