@@ -59,6 +59,9 @@ jobs:
           PY
       - name: Check the cask with Homebrew
         if: steps.edit.outputs.changed == 'true'
+        env:
+          # The online audit asks GitHub about the project; without a token the runner's shared address hits the 60 an hour limit.
+          HOMEBREW_GITHUB_API_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           brew tap-new --no-git hodkep/ci
