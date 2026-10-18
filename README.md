@@ -8,7 +8,7 @@ brew install --cask hodkep/tap/agent-world
 
 or in two steps: `brew tap hodkep/tap`, then `brew install --cask agent-world`.
 
-The app is not signed with an Apple Developer ID yet, so macOS blocks the first launch. The cask prints how to open it anyway (System Settings > Privacy & Security > Open Anyway).
+The app is not signed with an Apple Developer ID yet. So that it opens without macOS's "Open Anyway" step, the cask removes the quarantine mark macOS puts on downloaded apps from Agent World.app. That skips macOS's first-launch check for this app only, and the cask says so when it installs. If you want that check, download the dmg from the [release page](https://github.com/hodkep/agent-world/releases/latest) instead.
 
 **Updating.** Agent World tells you about a new version and can install it from inside the app. To update through Homebrew instead: `brew upgrade --cask --greedy agent-world` (`--greedy` is needed because the app updates itself).
 
