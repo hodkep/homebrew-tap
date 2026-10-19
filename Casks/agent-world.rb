@@ -1,9 +1,9 @@
 cask "agent-world" do
   arch arm: "arm64", intel: "x64"
 
-  version "0.1.2"
-  sha256 arm:   "232504e3e2d750d318c75f0963786380b06dbb102e3748c098a0f12ee702b04a",
-         intel: "a00e688c5e513215ada45113fc67c779781020025df5e69467311f0ecdbf4f25"
+  version "0.2.0"
+  sha256 arm:   "fde1e0079fd83af4392e14b450265bb93e14ebc2a832abc1d545346a91710f00",
+         intel: "47443f5f8699c49bbe71486ad4613a3b1fdd0b401d6f3e5b715e965623774bd9"
 
   url "https://github.com/hodkep/agent-world/releases/download/v#{version}/Agent-World-#{version}-#{arch}.dmg"
   name "Agent World"
