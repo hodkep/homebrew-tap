@@ -1,9 +1,9 @@
 cask "agent-world" do
   arch arm: "arm64", intel: "x64"
 
-  version "0.6.2"
-  sha256 arm:   "fa6dd3cf1e333ce1812af6a75f48a58cdb93b35eace9087729cebfc407b86c43",
-         intel: "145cfe7c10cc4ae79a3bd51c53dcfad943e266866a2e746530bacdb0e51a204a"
+  version "0.6.3"
+  sha256 arm:   "e3fef2f0e71ed1138e1dd94d25bd4b9333f94f3b29b43821649344e49c496316",
+         intel: "2a86db0ca5f7bb32367e8f44bc3aef9e4d8d1a6a603828fc1b19f1f65b3792f9"
 
   url "https://github.com/hodkep/agent-world/releases/download/v#{version}/Agent-World-#{version}-#{arch}.dmg"
   name "Agent World"
@@ -36,3 +36,4 @@ cask "agent-world" do
       https://github.com/hodkep/agent-world/releases/latest
   EOS
 end
+
