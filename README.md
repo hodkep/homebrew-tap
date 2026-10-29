@@ -3,14 +3,16 @@
 Homebrew tap for [Agent World](https://github.com/hodkep/agent-world), a pixel-art office for running Claude Code and Antigravity agents. macOS only.
 
 ```
+brew tap hodkep/tap
+brew trust --cask hodkep/tap/agent-world
 brew install --cask hodkep/tap/agent-world
 ```
 
-or in two steps: `brew tap hodkep/tap`, then `brew install --cask agent-world`.
+Homebrew 6 and later loads nothing from a third-party tap until you trust it, so the old one-line `brew install --cask hodkep/tap/agent-world` stops with "Cask is unavailable", and after `brew tap` with "Refusing to load cask ... from untrusted tap". Tap and trust are each needed once on each Mac. Until the tap is trusted, `brew outdated` and `brew upgrade` refuse the same way; `brew trust --cask hodkep/tap/agent-world` fixes it.
 
 The app is not signed with an Apple Developer ID yet. So that it opens without macOS's "Open Anyway" step, the cask removes the quarantine mark macOS puts on downloaded apps from Agent World.app. That skips macOS's first-launch check for this app only, and the cask says so when it installs. If you want that check, download the dmg from the [release page](https://github.com/hodkep/agent-world/releases/latest) instead.
 
-**Updating.** Agent World tells you about a new version and can install it from inside the app. To update through Homebrew instead: `brew upgrade --cask --greedy agent-world` (`--greedy` is needed because the app updates itself).
+**Updating.** Agent World tells you about a new version and can install it from inside the app. To update through Homebrew instead (the tap must be trusted, as above): `brew upgrade --cask --greedy agent-world` (`--greedy` is needed because the app updates itself).
 
 **Removing.** `brew uninstall --cask agent-world`. Your agents, worktrees and settings live in `~/.agent-world` and are not touched.
 
