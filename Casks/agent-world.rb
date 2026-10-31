@@ -5,13 +5,15 @@ cask "agent-world" do
   sha256 arm:   "d379af6866ea9abddf4101c4c5a8e36b46cc8deb54ecd307df1158bcd63d3a76",
          intel: "828cf40cf614f47ff423e213fe08fb7db66a840c3e7394077706b8b6bd343688"
 
-  url "https://github.com/hodkep/agent-world/releases/download/v#{version}/Agent-World-#{version}-#{arch}.dmg"
+  # The project's mirror (Cloudflare R2), which is faster than GitHub's release downloads; it keeps the newest stable, the version named here.
+  url "https://pub-761b6780fbbc4b30b60a22f902c0e743.r2.dev/v#{version}/Agent-World-#{version}-#{arch}.dmg",
+      verified: "pub-761b6780fbbc4b30b60a22f902c0e743.r2.dev/"
   name "Agent World"
   desc "Run and steer coding agents as characters in a pixel-art office"
   homepage "https://github.com/hodkep/agent-world"
 
   livecheck do
-    url :url
+    url "https://github.com/hodkep/agent-world"
     strategy :github_latest
   end
 
