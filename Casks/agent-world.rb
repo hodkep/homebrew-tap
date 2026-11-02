@@ -6,7 +6,7 @@ cask "agent-world" do
          intel: "f56a5cd057a6765c05ec1b6ca20fa73f392263e4b9b2c0441edc024605404769"
 
   # The project's mirror (Cloudflare R2), which is faster than GitHub's release downloads; it keeps the newest stable, the version named here.
-  url "https://pub-761b6780fbbc4b30b60a22f902c0e743.r2.dev/v#{version}/Agent-World-#{version}-#{arch}.dmg"
+  url "https://dl.agent-world.in/v#{version}/Agent-World-#{version}-#{arch}.dmg"
   name "Agent World"
   desc "Run and steer coding agents as characters in a pixel-art office"
   homepage "https://github.com/hodkep/agent-world"
