@@ -1,9 +1,9 @@
 cask "agent-world" do
   arch arm: "arm64", intel: "x64"
 
-  version "0.9.4"
-  sha256 arm:   "84cfcdfc8b6f5426bcf4c40810ec904709524ca1aa421241feda6117734fdcd7",
-         intel: "f56a5cd057a6765c05ec1b6ca20fa73f392263e4b9b2c0441edc024605404769"
+  version "0.10.0"
+  sha256 arm:   "05c8c34e7113cbd199dbfec920bd90e397876dbc0573bff96f20fb65ec4d1619",
+         intel: "31c1a855af8a688ca417994af88433e391986f4163a0e39bb9b8a13826b4dd7a"
 
   # The project's mirror (Cloudflare R2), which is faster than GitHub's release downloads; it keeps the newest stable, the version named here.
   url "https://dl.agent-world.in/v#{version}/Agent-World-#{version}-#{arch}.dmg"
