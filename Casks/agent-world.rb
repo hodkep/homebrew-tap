@@ -5,7 +5,7 @@ cask "agent-world" do
   sha256 arm:   "32f93aa3f0500eb12c2a71636cac9e4833e44c483c6514d0e0a63a498322b011",
          intel: "262f944d1717fcfcd45d5b2f8a09858126b1a0d655e39a0fe49d178555133a9f"
 
-  # The project's mirror (Cloudflare R2), which is faster than GitHub's release downloads; it keeps the newest stable, the version named here.
+  # The project's mirror (Cloudflare R2), faster than GitHub's downloads; it keeps the newest stable.
   url "https://dl.agent-world.in/v#{version}/Agent-World-#{version}-#{arch}.dmg"
   name "Agent World"
   desc "Run and steer coding agents as characters in a pixel-art office"
@@ -37,4 +37,3 @@ cask "agent-world" do
       https://github.com/hodkep/agent-world/releases/latest
   EOS
 end
-
