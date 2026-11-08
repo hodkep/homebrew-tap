@@ -65,6 +65,8 @@ jobs:
         run: |
           set -euo pipefail
           brew tap-new --no-git hodkep/ci
+          # A tap made on the spot is not trusted: Homebrew 6 and later refuses to load a cask from one until it is.
+          brew trust hodkep/ci
           dir="$(brew --repository)/Library/Taps/hodkep/homebrew-ci/Casks"
           mkdir -p "$dir" && cp Casks/agent-world.rb "$dir/"
           brew style hodkep/ci/agent-world
